@@ -61,7 +61,7 @@
                                 <q-btn @click="showEdit(postit.id)" color="gray" flat icon="edit" round size="s"
                                        v-show="postit.user==user"></q-btn>
                                 <q-btn :icon="liked(postit)" @click="like(postit.id)" color="gray" flat round size="sm"
-                                       v-show="postit.user!=user">
+                                       :disable="postit.user==user">
 
                                     <q-badge floating v-if="postit.likedBy.length>0">{{postit.likedBy.length}}</q-badge>
 
