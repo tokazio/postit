@@ -26,37 +26,49 @@
 
 <div id="q-app">
 
+    <q-layout view="hHh lpR fFf">
 
-    <div class="flex flex-center column">
-        <div class="row" style="min-height: 400px; width: 100%;">
-            <q-layout>
+        <q-drawer bordered show-if-above side="left">
+            <!-- drawer content -->
+        </q-drawer>
 
-                <div class="fit row wrap justify-start items-start content-start" id="parent" style="overflow: hidden;">
+        <q-page-container>
+            <q-page>
+                <div class="flex flex-center column">
+                    <div class="row" style="min-height: 400px; width: 100%;">
 
-                    <div class="q-pa-md row items-start q-gutter-md" style="overflow: auto;" v-for="postit in postits">
-                        <q-card class="my-card shadow-1 bg-yellow-2 q-pa-xs" square style="min-width:150px">
-                            <q-card-section class="q-ma-none q-pa-xs">
-                                <pre style="margin:0;padding:0" v-html="postit.text"></pre>
-                            </q-card-section>
-                            <q-card-actions align="right">
-                                <q-btn @click="confirmDelete(postit.id)" color="red" flat icon="delete" round size="xs"
-                                       v-show="postit.user==user"></q-btn>
-                                <q-btn @click="editPostit(postit.id)" color="gray" flat icon="edit" round size="xs"
-                                       v-show="postit.user==user"></q-btn>
-                            </q-card-actions>
-                        </q-card>
+
+                        <div class="fit row wrap justify-start items-start content-start" id="parent"
+                             style="overflow: hidden;">
+
+                            <div class="q-pa-md row items-start q-gutter-md" style="overflow: auto;"
+                                 v-for="postit in postits">
+                                <q-card class="my-card shadow-1 bg-yellow-2 q-pa-xs" square style="min-width:150px">
+                                    <q-card-section class="q-ma-none q-pa-xs">
+                                        <pre style="margin:0;padding:0" v-html="postit.text"></pre>
+                                    </q-card-section>
+                                    <q-card-actions align="right">
+                                        <q-btn @click="confirmDelete(postit.id)" color="red" flat icon="delete" round size="xs"
+                                               v-show="postit.user==user"></q-btn>
+                                        <q-btn @click="editPostit(postit.id)" color="gray" flat icon="edit" round size="xs"
+                                               v-show="postit.user==user"></q-btn>
+                                    </q-card-actions>
+                                </q-card>
+                            </div>
+
+                            <q-page-sticky :offset="[18, 18]" position="bottom-right">
+                                <q-btn @click="addDialog = true" color="accent" fab icon="add"></q-btn>
+                            </q-page-sticky>
+
+                        </div>
+
+
                     </div>
-
-                    <q-page-sticky :offset="[18, 18]" position="bottom-right">
-                        <q-btn @click="addDialog = true" color="accent" fab icon="add"></q-btn>
-                    </q-page-sticky>
-
                 </div>
-            </q-layout>
+            </q-page>
+        </q-page-container>
 
-
-        </div>
-    </div>
+    </q-layout>
 
     <q-dialog persistent v-model="deleteDialog">
         <q-card>
@@ -161,7 +173,8 @@
             textNew: '',
             textEdit: '',
             user: '',
-            postits: null
+            postits: null,
+            users: null
           }
         },
         methods: {
@@ -233,6 +246,12 @@
                   .get('/api/postit')
                   .then(response => (this.postits = response.data));
 
+            },
+
+            refreshUsers: function(){
+                axios
+                  .get('/api/postit/users')
+                  .then(response => (this.users = response.data));
             },
 
             connect: function() {

@@ -14,8 +14,7 @@ public class PostitResource {
     private Set<Postit> items = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
 
     public PostitResource() {
-        items.add(new Postit("a", "rpetit"));
-        items.add(new Postit("b", "bob"));
+
     }
 
     @GET
@@ -33,7 +32,7 @@ public class PostitResource {
     @POST
     public Postit edit(@PathParam("id") String id, Postit postit) {
         Postit edited = items.stream().filter(p -> p.id.equals(id)).findAny().orElse(Postit.NOTFOUND);
-        if (edited != null) {
+        if (!"system".equals(edited.getUser())) {
             edited.setText(postit.getText());
         }
         return edited;

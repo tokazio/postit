@@ -18,7 +18,7 @@ public class Postit {
     }
 
     public String getText() {
-        return text;
+        return text != null ? text : "";
     }
 
     public void setText(String text) {
