@@ -18,6 +18,7 @@
 * [ ] utiliser List plutôt que Set (qui fait de l'ordre alpha)
 * [v] police du pre
 * [ ] card add/remove animation
+* [ ] précisions dans les notifs (valide ou erreur)
 
 #Quarkus
 
