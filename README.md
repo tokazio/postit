@@ -1,5 +1,26 @@
 # postit
 
+
+## TODO
+* [ ] onglet 1 -> note du sprint 1 à 5
+* [ ] onglet 2 -> 5 catégories
+* [ ] onglet 3 -> actions
+* [ ] onglet 4 -> note de l'utilité de la rétro
+* [v] bouton save (en bas à droite comme +)
+* [v] bouton 'coeur' sur postit qui ne sont pas les miens + count
+* [v] passer automatiquement à la ligne + aligner à gauche
+* [ ] surbrillance selection de l'admin
+* [ ] editable/supp par l'admin
+* [v] user même largeur
+* [v] couleurs plus fluo :D + ordonnée
+* [v] couleur fond liste user
+* [v] se reconnecter au click sur synchro
+* [ ] utiliser List plutôt que Set (qui fait de l'ordre alpha)
+* [v] police du pre
+* [ ] card add/remove animation
+
+#Quarkus
+
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .

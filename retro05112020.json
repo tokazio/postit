@@ -1,0 +1,227 @@
+[
+  {
+    "text": "de points sur l'avancée du projet \navec toute l'équipe",
+    "user": "Baptiste",
+    "categorie": {
+      "value": "PLUS",
+      "label": "Faire plus"
+    },
+    "id": "43efdc90-d92d-407c-80b0-7c5134973451"
+  },
+  {
+    "text": "De revues de code \n\"technique\"",
+    "user": "Alex",
+    "categorie": {
+      "value": "PLUS",
+      "label": "Faire plus"
+    },
+    "id": "086c1eea-b2e9-475a-8b9e-603e6b4efb79"
+  },
+  {
+    "text": "Maitriser les sujets avant dev",
+    "user": "julie",
+    "categorie": {
+      "value": "COMMENCER",
+      "label": "Commencer à"
+    },
+    "id": "63f645b7-2327-488c-a4ae-18c5c8bdf48b"
+  },
+  {
+    "text": "de requête en bande de caisse &#128540;",
+    "user": "rpetit",
+    "categorie": {
+      "value": "MOINS",
+      "label": "Faire moins"
+    },
+    "id": "900a69ce-e5bf-44e4-bc4e-9ebec2e3c9f4"
+  },
+  {
+    "text": "avoir des outils qui s'adapte\n à nous\n et pas l'inverse (jira, snapshot)",
+    "user": "rpetit",
+    "categorie": {
+      "value": "COMMENCER",
+      "label": "Commencer à"
+    },
+    "id": "d98c8512-cd2d-49b9-9181-c33c6c3ea175"
+  },
+  {
+    "text": "de DP",
+    "user": "Alex",
+    "categorie": {
+      "value": "MOINS",
+      "label": "Faire moins"
+    },
+    "id": "a30805a6-ddf6-4e53-a156-5d0a3c848a76"
+  },
+  {
+    "text": "contacter plus les gens au\n courant avant de se lancer",
+    "user": "rpetit",
+    "categorie": {
+      "value": "COMMENCER",
+      "label": "Commencer à"
+    },
+    "id": "deebcc97-cdac-4a58-9238-536b205eee42"
+  },
+  {
+    "text": "revue de code fréquentes",
+    "user": "rpetit",
+    "categorie": {
+      "value": "CONTINUER",
+      "label": "Continuer à"
+    },
+    "id": "a93f5be8-0806-4afe-9ff8-ef43a23a417b"
+  },
+  {
+    "text": "affinage techniques précis",
+    "user": "rpetit",
+    "categorie": {
+      "value": "CONTINUER",
+      "label": "Continuer à"
+    },
+    "id": "23311c5d-539a-42e5-af39-4fdaac322a35"
+  },
+  {
+    "text": "de pauses à rallonge\n(concentré!!!)",
+    "user": "Alex",
+    "categorie": {
+      "value": "MOINS",
+      "label": "Faire moins"
+    },
+    "id": "10a0a206-68f3-418f-8b68-4aed465bccc3"
+  },
+  {
+    "text": "Finir ;) \n",
+    "user": "john",
+    "categorie": {
+      "value": "COMMENCER",
+      "label": "Commencer à"
+    },
+    "id": "408a06df-d7a1-43c4-8c1d-da7458b5d763"
+  },
+  {
+    "text": "Revues efficaces\nMontée Compétences",
+    "user": "rpetit",
+    "categorie": {
+      "value": "CONTINUER",
+      "label": "Continuer à"
+    },
+    "id": "8b20b9f0-f446-4cdc-88e9-6595e261297e"
+  },
+  {
+    "text": "de post-it",
+    "user": "julie",
+    "categorie": {
+      "value": "PLUS",
+      "label": "Faire plus"
+    },
+    "id": "16272689-bc75-4c40-b9f4-e305c809e7c6"
+  },
+  {
+    "text": "Rétros avec APEROS",
+    "user": "julie",
+    "categorie": {
+      "value": "PLUS",
+      "label": "Faire plus"
+    },
+    "id": "82264b86-d3a2-4699-a593-4c36041d2c31"
+  },
+  {
+    "text": "Retour du BE \nMeilleure sera analyse et specs",
+    "user": "julie",
+    "categorie": {
+      "value": "COMMENCER",
+      "label": "Commencer à"
+    },
+    "id": "183bcbd9-9396-4ac3-bd82-7cae737e9c01"
+  },
+  {
+    "text": "Faire un pont entre les vm \net le vpn",
+    "user": "rpetit",
+    "categorie": {
+      "value": "COMMENCER",
+      "label": "Commencer à"
+    },
+    "id": "90efcfc1-a6e3-4bab-ace6-cf3bbe2b1015"
+  },
+  {
+    "text": "Faire des formations",
+    "user": "Baptiste",
+    "categorie": {
+      "value": "CONTINUER",
+      "label": "Continuer à"
+    },
+    "id": "c8dcf587-ff01-44ae-a9c1-8ee5c7f2bd4c"
+  },
+  {
+    "text": "Faire des points réguliers\n sur le projet",
+    "user": "Baptiste",
+    "categorie": {
+      "value": "CONTINUER",
+      "label": "Continuer à"
+    },
+    "id": "1676c0bd-c82d-4c55-8fef-15f844f175d1"
+  },
+  {
+    "text": "Faire du vélo (quand ça rouvrira)",
+    "user": "julie",
+    "categorie": {
+      "value": "COMMENCER",
+      "label": "Commencer à"
+    },
+    "id": "5dae6911-a03e-487f-a72d-a78b93542f5f"
+  },
+  {
+    "text": "Pousser l'ISH à nous trouver \ndes solutions pour le\n télétravail",
+    "user": "rpetit",
+    "categorie": {
+      "value": "CONTINUER",
+      "label": "Continuer à"
+    },
+    "id": "ef7ab6fc-2678-43c6-9958-33cfee3d2100"
+  },
+  {
+    "text": "Covid",
+    "user": "Quentin",
+    "categorie": {
+      "value": "ARRETER",
+      "label": "Arrêter de"
+    },
+    "id": "046a9b53-ab29-4022-8f93-1eaf10d99adc"
+  },
+  {
+    "text": "s'entre aider",
+    "user": "Alex",
+    "categorie": {
+      "value": "CONTINUER",
+      "label": "Continuer à"
+    },
+    "id": "5d85c593-5c79-413a-827d-18826fa310b1"
+  },
+  {
+    "text": "Avoir une bonne ambiance\n dans le DF",
+    "user": "rpetit",
+    "categorie": {
+      "value": "CONTINUER",
+      "label": "Continuer à"
+    },
+    "id": "9c280d37-3a94-41b2-98d3-d236a47b979a"
+  },
+  {
+    "text": "faire des BB :) J'en peux plus\n",
+    "user": "john",
+    "categorie": {
+      "value": "ARRETER",
+      "label": "Arrêter de"
+    },
+    "id": "9dd9c2e0-d27c-4b61-be41-b22451ae5b4c"
+  },
+  {
+    "text": "refaire le monde au 1er wtf",
+    "user": "rpetit",
+    "categorie": {
+      "value": "ARRETER",
+      "label": "Arrêter de"
+    },
+    "id": "6f2cd3a1-c79c-4451-8a38-a2dae3983244"
+  }
+]

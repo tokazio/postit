@@ -23,51 +23,61 @@
 </head>
 
 <body>
-
 <div id="q-app">
-
     <q-layout view="hHh lpR fFf">
-
-        <q-drawer bordered show-if-above side="left">
-            <!-- drawer content -->
+        <q-drawer bordered content-style="background-color:#666" show-if-above side="left" width="160">
+            <div class="column" style="width:100%;text-align:center">
+                <div class="q-ma-sm col">
+                    <q-badge :color="syncColor()" @click="connect()">
+                        synchronisation
+                    </q-badge>
+                </div>
+                <div class="col">
+                    <q-chip class="col" style="width:90%" v-for="user in users">
+                        <q-avatar>
+                            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                        </q-avatar>
+                        {{user}}
+                    </q-chip>
+                </div>
+            </div>
         </q-drawer>
-
         <q-page-container>
             <q-page>
-                <div class="flex flex-center column">
-                    <div class="row" style="min-height: 400px; width: 100%;">
+                <div class="row">
+                    <div class="col" style="text-align:center" v-for="categorie in categories">
+                        <q-chip class="q-mt-md">{{categorie.label}}</q-chip>
 
+                        <q-card :class="postitColor(postit)" class="q-ma-md my-card shadow-1 q-pa-xs" square
+                                style="min-width:150px" v-for="postit in postits"
+                                v-if="postit.categorie.value==categorie.value">
+                            <q-card-section class="q-ma-none q-pa-xs text-caption">
+                                <pre style="margin:0;padding:0;white-space: pre-wrap;word-break: keep-all;text-align:left"
+                                     v-html="postit.text"></pre>
+                            </q-card-section>
+                            <q-card-actions align="right">
+                                <q-btn @click="confirmDelete(postit.id)" color="gray" flat icon="delete" round size="xs"
+                                       v-show="postit.user==user"></q-btn>
+                                <q-btn @click="showEdit(postit.id)" color="gray" flat icon="edit" round size="s"
+                                       v-show="postit.user==user"></q-btn>
+                                <q-btn :icon="liked(postit)" @click="like(postit.id)" color="gray" flat round size="sm"
+                                       v-show="postit.user!=user">
 
-                        <div class="fit row wrap justify-start items-start content-start" id="parent"
-                             style="overflow: hidden;">
+                                    <q-badge floating v-if="postit.likedBy.length>0">{{postit.likedBy.length}}</q-badge>
 
-                            <div class="q-pa-md row items-start q-gutter-md" style="overflow: auto;"
-                                 v-for="postit in postits">
-                                <q-card class="my-card shadow-1 bg-yellow-2 q-pa-xs" square style="min-width:150px">
-                                    <q-card-section class="q-ma-none q-pa-xs">
-                                        <pre style="margin:0;padding:0" v-html="postit.text"></pre>
-                                    </q-card-section>
-                                    <q-card-actions align="right">
-                                        <q-btn @click="confirmDelete(postit.id)" color="red" flat icon="delete" round size="xs"
-                                               v-show="postit.user==user"></q-btn>
-                                        <q-btn @click="editPostit(postit.id)" color="gray" flat icon="edit" round size="xs"
-                                               v-show="postit.user==user"></q-btn>
-                                    </q-card-actions>
-                                </q-card>
-                            </div>
-
-                            <q-page-sticky :offset="[18, 18]" position="bottom-right">
-                                <q-btn @click="addDialog = true" color="accent" fab icon="add"></q-btn>
-                            </q-page-sticky>
-
-                        </div>
+                                </q-btn>
+                            </q-card-actions>
+                        </q-card>
 
 
                     </div>
                 </div>
+                <q-page-sticky :offset="[18, 18]" position="bottom-right">
+                    <q-btn @click="showEdit(null)" color="primary" fab icon="add"></q-btn>
+                    <q-btn @click="save()" color="secondary" fab icon="save"></q-btn>
+                </q-page-sticky>
             </q-page>
         </q-page-container>
-
     </q-layout>
 
     <q-dialog persistent v-model="deleteDialog">
@@ -85,52 +95,43 @@
 
     <q-dialog full-width persistent v-model="addDialog">
         <q-card>
-            <q-card-section class="row items-center">
-                <div class="q-pa-md" style="width: 100%">
-                    <q-input
-                            autofocus
-                            label="Texte du PostIt"
-                            outlined
-                            type="textarea" v-model="textNew"
-                    />
-                </div>
-            </q-card-section>
+            <q-form @reset.prevent.stop="onReset" @submit.prevent.stop="validEdit()">
+                <q-card-section class="row items-center">
+                    <div class="q-pa-md" style="width: 100%">
 
-            <q-card-actions align="right">
-                <q-btn color="primary" flat label="Annuler" v-close-popup></q-btn>
-                <q-btn @click="addPostit()" color="primary" label="Ajouter" v-close-popup></q-btn>
-            </q-card-actions>
+                        <q-select :options="categories" :rules="[val => !!val || 'Vous devez choisir une catégorie']"
+                                  autofocus
+                                  class="q-mb-md"
+                                  label="Categorie"
+                                  ref="cat"
+                                  transition-hide="flip-down" transition-show="flip-up"
+                                  v-model="selectedCat"></q-select>
+                        <q-input
+                                :rules="[val => !!val || 'Vous devez donner un texte']"
+                                label="Texte du PostIt"
+                                outlined
+                                ref="text"
+                                type="textarea" v-model="textEdit"
+                        ></q-input>
+
+                    </div>
+                </q-card-section>
+                <q-card-actions align="right">
+                    <q-btn color="primary" flat label="Annuler" v-close-popup></q-btn>
+                    <q-btn color="primary" label="Valider" type="submit"></q-btn>
+                </q-card-actions>
+            </q-form>
         </q-card>
     </q-dialog>
 
-    <q-dialog full-width persistent v-model="editDialog">
-        <q-card>
-            <q-card-section class="row items-center">
-                <div class="q-pa-md" style="width: 100%">
-                    <q-input
-                            autofocus
-                            label="Texte du PostIt"
-                            outlined
-                            type="textarea"
-                            v-model="textEdit"
-                    />
-                </div>
-            </q-card-section>
-
-            <q-card-actions align="right">
-                <q-btn color="primary" flat label="Annuler" v-close-popup></q-btn>
-                <q-btn @click="doEditPostit()" color="primary" label="Modifier" v-close-popup></q-btn>
-            </q-card-actions>
-        </q-card>
-    </q-dialog>
-
-    <q-dialog full-width persistent v-model="userDialog">
+    <q-dialog persistent v-model="userDialog">
         <q-card>
             <q-card-section class="row items-center">
                 <div class="q-pa-md" style="width: 100%">
                     <q-input @keydown.enter.prevent="connect()"
                              autofocus label="Nom d'utilisateur"
                              v-model="user"
+                             :rules="[val => !!val || 'Field is required']"
                     >
                         <template v-slot:prepend>
                             <q-icon name="fas fa-user"/>
@@ -146,7 +147,6 @@
             </q-card-actions>
         </q-card>
     </q-dialog>
-
 </div>
 
 <!-- Add the following at the end of your body tag -->
@@ -156,6 +156,7 @@
 <script src="https://cdn.jsdelivr.net/npm/quasar@1.14.1/dist/lang/fr.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+</body>
 <script>
       Quasar.lang.set(Quasar.lang.fr)
 
@@ -163,18 +164,20 @@
         el: '#q-app',
         data: function () {
           return {
+            mode: null,
             connection: null,
+            connected: false,
             addDialog: false,
             deleteDialog: false,
             deletingId: -1,
             userDialog: true,
-            editDialog: false,
             editingId: -1,
-            textNew: '',
             textEdit: '',
             user: '',
             postits: null,
-            users: null
+            users: null,
+            categories: null,
+            selectedCat: null,
           }
         },
         methods: {
@@ -185,60 +188,134 @@
             },
 
             deletePostit: function(){
-            me = this;
+                me = this;
                 axios({
                   method: 'delete',
                   url: '/api/postit/'+this.deletingId,
                   }).then(function () {
-                    me.deletingId = -1
-                    me.refresh()
-                    me.connection.send('refresh');
-                    })
+                      me.notif('Supprimé','positive')
+                      me.deletingId = -1
+                      me.refresh()
+                      me.connection.send('refresh');
+                }, function(err){
+                    me.notif( err,'negative')
+                })
             },
 
-            editPostit: function(id){
-            this.editingId = id
-            me = this
+            liked: function(postit){
+                if(postit.likedBy.includes(this.user)){
+                return 'fas fa-heart'
+                }
+                return 'far fa-heart'
+            },
+
+            like: function(id){
                 axios({
-                  method: 'get',
-                  url: '/api/postit/'+me.editingId
-                  }).then(function (response) {
-                    me.textEdit = response.data.text
-                    me.editDialog = true
+                    method: 'post',
+                    url: '/api/postit/like/'+id,
+                    data: { user : this.user }
+                }).then(function (response) {
+                    me.notif(response.data,'positive')
+                    me.refresh();
+                    me.connection.send('refresh');
+                }, function(err){
+                    me.notif(err,'negative')
+                });
+            },
+
+            showEdit: function(id){
+                console.log('showEdit: '+id)
+                this.selectedCat = null
+                this.textEdit = ''
+                this.editingId = null
+                if(id!=null){
+                    //EDIT
+                    this.editingId = id
+                    me = this
+                    axios({
+                        method: 'get',
+                        url: '/api/postit/'+me.editingId
+                    }).then(function (response) {
+                        console.log(response.data)
+                        me.textEdit = response.data.text
+                        me.selectedCat = response.data.categorie
                     })
+                }
+                this.addDialog = true
+            },
+
+            validEdit: function(){
+                 this.$refs.cat.validate()
+                  this.$refs.text.validate()
+
+                  if (this.$refs.cat.hasError || this.$refs.text.hasError) {
+                    this.formHasError = true
+                  }
+
+                if(this.editingId==null){
+                    this.doAddPostit();
+                }else{
+                    this.doEditPostit();
+                }
             },
 
             doEditPostit: function(){
-             me = this;
+                console.log("doEditPostit");
+                me = this;
                 axios({
-                  method: 'post',
-                  url: '/api/postit/'+this.editingId,
-                  data: {
-                    text: this.textEdit,
-                    user: this.user
-                  }
+                    method: 'post',
+                    url: '/api/postit/'+this.editingId,
+                    data: {
+                        text: this.textEdit,
+                        user: this.user,
+                        categorie: this.selectedCat
+                    }
                 }).then(function () {
+                    me.addDialog = false
+                    me.notif('Modifié','positive')
                     me.textEdit = '';
                     me.editingId = -1
-                   me.refresh();
-                   me.connection.send('refresh');
-                   });
+                    me.refresh();
+                    me.connection.send('refresh');
+                }, function(err){
+                    me.notif(err,'negative')
+                });
             },
 
-            addPostit: function(){
-             me = this;
+            save: function(){
+                me = this;
                 axios({
-                  method: 'post',
-                  url: '/api/postit',
-                  data: {
-                    text: this.textNew,
-                    user: this.user
-                  }
+                    method: 'post',
+                    url: '/api/postit/save',
                 }).then(function () {
-                    me.textNew = '';
+                    me.notif('Sauvegardé','positive')
+                    me.refresh();
+                }, function(err){
+                    me.notif(err,'negative')
+                });
+            },
+
+            doAddPostit: function(){
+                console.log("doAddPostit");
+                me = this;
+                axios({
+                    method: 'post',
+                    url: '/api/postit',
+                    data: {
+                        text: this.textEdit,
+                        user: this.user,
+                        categorie: this.selectedCat,
+                    }
+                }).then(function () {
+                   me.addDialog = false
+                   me.notif('Ajouté','positive')
+                   me.textEdit = '';
+                   me.selectedCat = null
                    me.refresh();
                    me.connection.send('refresh');
-                   });
+                },function(err){
+                     me.notif(err,'negative')
+                });
             },
 
             refresh: function(){
@@ -255,6 +332,9 @@
             },
 
             connect: function() {
+                if(this.user==null || this.user==''){
+                    return
+                }
                 this.userDialog = false
                 console.log("Starting connection to WebSocket Server")
                 this.connection = new WebSocket("ws://"+location.host+"/websock/"+this.user)
@@ -265,21 +345,90 @@
                   if(event.data.includes('refresh')){
                     me.refresh();
                   }
+                  if(event.data.includes('joined')){
+                     me.notif(event.data,'info')
+                  }
+                  if(event.data.includes('left')){
+                     me.notif(event.data,'info')
+                  }
+                  me.refreshUsers();
                 }
 
                 this.connection.onopen = function(event) {
                   console.log(event)
                   console.log("Successfully connected to the websocket server...")
+                  me.connected = true
+                  me.refreshUsers();
                 }
 
-              }
+                this.connection.onclose = function(event) {
+                  console.log(event)
+                  console.log("Websocket closed")
+                  me.connected = false
+                  me.notif('Déconnecté','info')
+                }
+
+                this.connection.onerror = function(event) {
+                  console.log(event)
+                  console.log("Websocket error")
+                  me.connected = false
+                  me.notif('Déconnecté','info')
+                }
+
+
+              },
+
+              syncColor: function(){
+                    return this.connected ? 'green' : 'red'
+              },
+
+              postitColor : function(postit){
+
+                    t = 'text-grey-1 '
+
+                    if(postit.categorie.value=='ARRETER'){
+                        return t+'bg-red';
+                    }
+                    if(postit.categorie.value=='CONTINUER'){
+                        return t+'bg-pink';
+                    }
+                    if(postit.categorie.value=='MOINS'){
+                        return t+'bg-purple';
+                    }
+                    if(postit.categorie.value=='PLUS'){
+                        return t+'bg-deep-purple';
+                    }
+                    if(postit.categorie.value=='COMMENCER'){
+                        return t+'bg-indigo';
+                    }
+
+                    return 'bg-amber'
+
+                },
+
+                notif: function(text,aColor){
+                      this.$q.notify({
+                        position: 'bottom-left',
+                        message: text,
+                        color: aColor
+                      })
+                },
+
 
         },
         mounted () {
             this.refresh();
+            me = this
+            axios
+                  .get('/api/postit/categories')
+                  .then(function(response){
+                       me.categories = response.data
+                       console.log(me.categories)
+                   });
+
+
         }
       })
 
 </script>
-</body>
 </html>
