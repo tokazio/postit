@@ -5,18 +5,18 @@ import java.util.List;
 
 public interface Categories {
 
-    Categorie NONE = new Categorie("NONE", "Aucune");
-    Categorie ARRETER = new Categorie("ARRETER", "Arrêter de");
-    Categorie CONTINUER = new Categorie("CONTINUER", "Continuer à");
-    Categorie MOINS = new Categorie("MOINS", "Faire moins");
-    Categorie PLUS = new Categorie("PLUS", "Faire plus");
-    Categorie COMMENCER = new Categorie("COMMENCER", "Commencer à");
+    Category NONE = new Category("NONE", "Aucune");
+    Category ARRETER = new Category("ARRETER", "Arrêter de");
+    Category CONTINUER = new Category("CONTINUER", "Continuer à");
+    Category MOINS = new Category("MOINS", "Faire moins");
+    Category PLUS = new Category("PLUS", "Faire plus");
+    Category COMMENCER = new Category("COMMENCER", "Commencer à");
 
-    List<Categorie> ALL = Arrays.asList(ARRETER, CONTINUER, MOINS, PLUS, COMMENCER);
+    List<Category> ALL = Arrays.asList(ARRETER, CONTINUER, MOINS, PLUS, COMMENCER);
 
-    static Categorie from(Categorie categorie) {
-        for (Categorie c : ALL) {
-            if (c.getValue().equals(categorie.getValue())) {
+    static Category from(final Category category) {
+        for (Category c : ALL) {
+            if (c.getValue().equals(category.getValue())) {
                 return c;
             }
         }

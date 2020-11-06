@@ -1,6 +1,5 @@
 package fr.tokazio.postit;
 
-import fr.tokazio.postitrest.PostitResourceTest;
 import io.quarkus.test.junit.NativeImageTest;
 
 @NativeImageTest

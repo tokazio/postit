@@ -45,23 +45,23 @@
         <q-page-container>
             <q-page>
                 <div class="row">
-                    <div class="col" style="text-align:center" v-for="categorie in categories">
-                        <q-chip class="q-mt-md">{{categorie.label}}</q-chip>
+                    <div class="col" style="text-align:center" v-for="category in categories">
+                        <q-chip class="q-mt-md">{{category.label}}</q-chip>
 
                         <q-card :class="postitColor(postit)" class="q-ma-md my-card shadow-1 q-pa-xs" square
                                 style="min-width:150px" v-for="postit in postits"
-                                v-if="postit.categorie.value==categorie.value">
+                                v-if="postit.category.value==category.value">
                             <q-card-section class="q-ma-none q-pa-xs text-caption">
                                 <pre style="margin:0;padding:0;white-space: pre-wrap;word-break: keep-all;text-align:left"
                                      v-html="postit.text"></pre>
                             </q-card-section>
                             <q-card-actions align="right">
-                                <q-btn @click="confirmDelete(postit.id)" color="gray" flat icon="delete" round size="xs"
+                                <q-btn @click="confirmDelete(postit.id)" color="gray" flat icon="delete" round size="sm"
                                        v-show="postit.user==user"></q-btn>
-                                <q-btn @click="showEdit(postit.id)" color="gray" flat icon="edit" round size="s"
+                                <q-btn @click="showEdit(postit.id)" color="gray" flat icon="edit" round size="sm"
                                        v-show="postit.user==user"></q-btn>
                                 <q-btn :icon="liked(postit)" @click="like(postit.id)" color="gray" flat round size="sm"
-                                       :disable="postit.user==user">
+                                       :disable="postit.user==user"></q-btn>
 
                                     <q-badge floating v-if="postit.likedBy.length>0">{{postit.likedBy.length}}</q-badge>
 
@@ -238,7 +238,7 @@
                     }).then(function (response) {
                         console.log(response.data)
                         me.textEdit = response.data.text
-                        me.selectedCat = response.data.categorie
+                        me.selectedCat = response.data.category
                     })
                 }
                 this.addDialog = true
@@ -268,7 +268,7 @@
                     data: {
                         text: this.textEdit,
                         user: this.user,
-                        categorie: this.selectedCat
+                        category: this.selectedCat
                     }
                 }).then(function () {
                     me.addDialog = false
@@ -304,7 +304,7 @@
                     data: {
                         text: this.textEdit,
                         user: this.user,
-                        categorie: this.selectedCat,
+                        category: this.selectedCat,
                     }
                 }).then(function () {
                    me.addDialog = false
@@ -386,19 +386,19 @@
 
                     t = 'text-grey-1 '
 
-                    if(postit.categorie.value=='ARRETER'){
+                    if(postit.category.value=='ARRETER'){
                         return t+'bg-red';
                     }
-                    if(postit.categorie.value=='CONTINUER'){
+                    if(postit.category.value=='CONTINUER'){
                         return t+'bg-pink';
                     }
-                    if(postit.categorie.value=='MOINS'){
+                    if(postit.category.value=='MOINS'){
                         return t+'bg-purple';
                     }
-                    if(postit.categorie.value=='PLUS'){
+                    if(postit.category.value=='PLUS'){
                         return t+'bg-deep-purple';
                     }
-                    if(postit.categorie.value=='COMMENCER'){
+                    if(postit.category.value=='COMMENCER'){
                         return t+'bg-indigo';
                     }
 

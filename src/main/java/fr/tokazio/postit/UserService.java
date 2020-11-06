@@ -8,11 +8,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ApplicationScoped
-public class UserList {
+public class UserService {
 
-    Map<String, Session> sessions = new ConcurrentHashMap<>();
+    private final Map<String, Session> sessions = new ConcurrentHashMap<>();
 
-    public void put(String username, Session session) {
+    public void put(final String username, final Session session) {
         sessions.put(username, session);
     }
 
@@ -20,7 +20,7 @@ public class UserList {
         return sessions.keySet();
     }
 
-    public void remove(String username) {
+    public void remove(final String username) {
         sessions.remove(username);
     }
 

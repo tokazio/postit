@@ -1,4 +1,4 @@
-package fr.tokazio.postitrest;
+package fr.tokazio.postit;
 
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;

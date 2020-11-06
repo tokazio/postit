@@ -15,6 +15,8 @@ dependencies {
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'io.quarkus:quarkus-junit5-mockito'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.18.0'
 }
 
 group 'fr.tokazio'
