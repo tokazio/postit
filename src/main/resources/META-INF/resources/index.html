@@ -13,7 +13,7 @@
           type="text/css">
     <link href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css"
           rel="stylesheet" type="text/css">
-    <link href="https://cdn.jsdelivr.net/npm/animate.css@^4.0.0/animate.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@^4.0.0/animate.compat.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.jsdelivr.net/npm/quasar@1.14.1/dist/quasar.min.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -43,28 +43,35 @@
                     <div class="col" style="text-align:center" v-for="category in categories">
                         <q-chip class="q-mt-md">{{category.label}}</q-chip>
 
-                        <q-card :class="postitColor(postit)" class="q-ma-md my-card shadow-1 q-pa-xs" square
-                                style="min-width:150px" v-for="postit in postits"
-                                v-if="postit.category.value==category.value">
-                            <q-card-section class="q-ma-none q-pa-xs text-caption">
+                        <transition
+                                appear
+                                enter-active-class="animated jackInTheBox"
+                                leave-active-class="animated hinge"
+                        >
+                            <q-card :class="postitColor(postit)" class="q-ma-md my-card shadow-1 q-pa-xs" square
+                                    style="min-width:150px" v-for="postit in postits"
+                                    v-if="postit.category.value==category.value">
+                                <q-card-section class="q-ma-none q-pa-xs text-caption">
                                 <pre style="margin:0;padding:0;white-space: pre-wrap;word-break: keep-all;text-align:left"
                                      v-html="postit.text"></pre>
-                            </q-card-section>
-                            <q-card-actions align="right">
-                                <q-btn @click="confirmDelete(postit.id)" color="gray" flat icon="delete" round size="sm"
-                                       v-show="postit.user==user"></q-btn>
-                                <q-btn @click="showEdit(postit.id)" color="gray" flat icon="edit" round size="sm"
-                                       v-show="postit.user==user"></q-btn>
-                                <q-btn :icon="liked(postit)" @click="like(postit.id)" color="gray" flat round size="sm"
-                                       :disable="postit.user==user">
-                                    <q-badge floating
-                                             v-if="postit!=null && postit.likedBy!=null && postit.likedBy.length>0">
-                                        {{postit.likedBy.length}}
-                                    </q-badge>
-                                </q-btn>
-                            </q-card-actions>
-                        </q-card>
-
+                                </q-card-section>
+                                <q-card-actions align="right">
+                                    <q-btn @click="confirmDelete(postit.id)" color="gray" flat icon="delete" round
+                                           size="sm"
+                                           v-show="postit.user==user"></q-btn>
+                                    <q-btn @click="showEdit(postit.id)" color="gray" flat icon="edit" round size="sm"
+                                           v-show="postit.user==user"></q-btn>
+                                    <q-btn :icon="liked(postit)" @click="like(postit.id)" color="gray" flat round
+                                           size="sm"
+                                           :disable="postit.user==user">
+                                        <q-badge floating
+                                                 v-if="postit!=null && postit.likedBy!=null && postit.likedBy.length>0">
+                                            {{postit.likedBy.length}}
+                                        </q-badge>
+                                    </q-btn>
+                                </q-card-actions>
+                            </q-card>
+                        </transition>
 
                     </div>
                 </div>
@@ -89,7 +96,7 @@
         </q-card>
     </q-dialog>
 
-    <q-dialog full-width persistent v-model="addDialog">
+    <q-dialog persistent v-model="addDialog">
         <q-card>
             <q-form @reset.prevent.stop="onReset" @submit.prevent.stop="validEdit()">
                 <q-card-section class="row items-center">
@@ -148,6 +155,6 @@
 <script src="https://cdn.jsdelivr.net/npm/quasar@1.14.1/dist/quasar.umd.modern.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quasar@1.14.1/dist/lang/fr.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="app.js"></script>
+<script src="app.js?version=22"></script>
 </body>
 </html>

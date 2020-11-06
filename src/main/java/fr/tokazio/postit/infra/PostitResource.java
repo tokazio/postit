@@ -1,8 +1,8 @@
 package fr.tokazio.postit.infra;
 
+import fr.tokazio.postit.Liked;
 import fr.tokazio.postit.Postit;
 import fr.tokazio.postit.User;
-import fr.tokazio.postit.api.Liking;
 import fr.tokazio.postit.api.PostitService;
 import fr.tokazio.postit.api.ResponseCode;
 import fr.tokazio.postit.api.ResponseStatus;
@@ -72,8 +72,8 @@ public class PostitResource {
     @Counted(name = "posits.like.count", description = "Count POST /postit/like/{id}")
     @Timed(name = "posits.like.time", description = "Time POST /postit/lile/{id}", unit = MetricUnits.MILLISECONDS)
     @Consumes(V1)
-    public Liking like(final @PathParam("id") String id, final User user) throws PostitNotFoundException, CantLikeAPostitIOwnException, NoUserException {
-        return service.like(id, user);
+    public Liked like(final @PathParam("id") String id, final User user) throws PostitNotFoundException, CantLikeAPostitIOwnException, NoUserException {
+        return new Liked(user.getUser(), service.like(id, user), id);
     }
 
     @POST

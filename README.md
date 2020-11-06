@@ -15,10 +15,10 @@
 * [v] couleurs plus fluo :D + ordonnée
 * [v] couleur fond liste user
 * [v] se reconnecter au click sur synchro
-* [ ] utiliser List plutôt que Set (qui fait de l'ordre alpha)
+* [v] utiliser List plutôt que Set (qui fait de l'ordre alpha)
 * [v] police du pre
-* [ ] card add/remove animation
-* [ ] précisions dans les notifs (valide ou erreur)
+* [ ] card add/remove animation -> TODO https://stackoverflow.com/questions/48652941/vue-click-animation-without-settimeout
+* [ ] précisions dans les notifs (valide ou erreur) [wip]
 
 #Quarkus
 

@@ -63,6 +63,7 @@ new Vue({
         },
 
         like: function(id){
+            console.log("like "+id+" returned: ");
             axios({
                 method: POST,
                 url: API_POSTITS+'like/'+id,
@@ -73,9 +74,18 @@ new Vue({
                     user : this.user
                 }
             }).then(function (response) {
-                me.notif(response.data,'positive')
+                console.log(response.data);
+                liking = response.data.liking
+                user = response.data.user
+                if(liking=='LIKE'){
+                    text = user + " aime";
+                    me.notif('Vous aimez','purple');
+                }else{
+                    text = user + " n'aime plus";
+                    me.notif("Vous n'aimez plus",'purple');
+                }
+                me.notifAll(text,'positive')
                 me.refresh();
-                me.connection.send('refresh');
             }, function(err){
                 me.notif(err,'negative')
             });
@@ -222,16 +232,27 @@ new Vue({
             me = this
             this.connection.onmessage = function(event) {
               console.log(event);
-              if(event.data.includes('refresh')){
-                me.refresh();
-              }
               if(event.data.includes('joined')){
                  me.notif(event.data,'info')
+                 me.refreshUsers();
               }
               if(event.data.includes('left')){
                  me.notif(event.data,'info')
+                 me.refreshUsers();
               }
-              me.refreshUsers();
+              from = event.data.substring(9).split(': ')[0];
+              if(from==me.user){
+                return
+              }
+              message = event.data.substring(9).split(': ')[1];
+              console.log(message);
+              if(message.includes('notif')){
+                  me.notif(message.substring(7),'purple')
+                  me.refresh();
+              }
+              if(message.trim()=='refresh'){
+                me.refresh();
+              }
             }
 
             this.connection.onopen = function(event) {
@@ -293,6 +314,11 @@ new Vue({
                     color: aColor
                   })
             },
+
+            notifAll: function(text){
+                me.connection.send('notif::'+text);
+            },
+
 
 
     },
