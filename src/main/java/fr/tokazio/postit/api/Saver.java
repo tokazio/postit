@@ -1,4 +1,6 @@
-package fr.tokazio.postit;
+package fr.tokazio.postit.api;
+
+import fr.tokazio.postit.Postit;
 
 import java.io.IOException;
 import java.util.List;

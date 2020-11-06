@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'io.quarkus'
 }
+
 repositories {
     mavenLocal()
     mavenCentral()
@@ -12,11 +13,16 @@ dependencies {
     implementation 'io.quarkus:quarkus-resteasy'
     implementation 'io.quarkus:quarkus-resteasy-jackson'
     implementation 'io.quarkus:quarkus-undertow-websockets'
+    implementation 'io.quarkus:quarkus-smallrye-metrics'
+    implementation 'io.quarkus:quarkus-smallrye-health'
+
+    compileOnly 'com.google.code.findbugs:jsr305:2.0.1'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'io.quarkus:quarkus-junit5-mockito'
-    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.18.0'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.18.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.5.13'
 }
 
 group 'fr.tokazio'

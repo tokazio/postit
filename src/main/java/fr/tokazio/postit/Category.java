@@ -3,6 +3,8 @@ package fr.tokazio.postit;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 public class Category {
 
     //These field are important as is
@@ -20,22 +22,26 @@ public class Category {
         return value;
     }
 
-    /*
-    public Category setValue(final String value) {
-        this.value = value;
-        return this;
-    }
-
-
-     */
     public String getLabel() {
         return label;
     }
-/*
-    public Category setLabel(String label) {
-        this.label = label;
-        return this;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return value.equals(category.value);
     }
 
- */
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+
+    @Override
+    public String toString() {
+        return value + "(" + label + ")";
+    }
 }

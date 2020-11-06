@@ -2,6 +2,7 @@ package fr.tokazio.postit;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.tokazio.postit.api.Saver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,8 +18,8 @@ public class SaverImpl implements Saver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SaverImpl.class);
 
-    private @Inject
-    ObjectMapper mapper;
+    @Inject
+    private ObjectMapper mapper;
 
     @Override
     public void save(final String filename, final List<Postit> items) throws IOException {

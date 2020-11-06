@@ -1,5 +1,7 @@
 package fr.tokazio.postit;
 
+import fr.tokazio.postit.api.Categories;
+
 public class PostItDummies {
 
     private PostItDummies() {

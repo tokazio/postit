@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Postit {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Postit.class);
 
+    @Nonnull
     String id = UUID.randomUUID().toString();
     private final List<String> likedBy = new ArrayList<>();
     private @NotEmpty @NotNull String text;
@@ -22,10 +24,10 @@ public class Postit {
     private @NotNull Category category;
 
     @JsonCreator
-    public Postit(final @JsonProperty("text") String text, final @JsonProperty("user") String user, final @JsonProperty("categorie") Category category) {
+    public Postit(final @JsonProperty("text") String text, final @JsonProperty("user") String user, final @JsonProperty("category") Category category) {
         this.text = text;
         this.user = user;
-        this.category = Categories.from(category);
+        this.category = category;
     }
 
     public Postit() {
@@ -36,14 +38,6 @@ public class Postit {
         return likedBy;
     }
 
-    /*
-    public Postit setLikedBy(final List<String> likedBy) {
-        this.likedBy = likedBy;
-        return this;
-    }
-
-     */
-
     public String getText() {
         return text != null ? text : "";
     }
@@ -52,29 +46,16 @@ public class Postit {
         this.text = text;
     }
 
+    @Nonnull
     public String getId() {
         return id;
     }
-
-    /*
-    public void setId(String id) {
-        this.id = id;
-    }
-
-     */
 
     public String getUser() {
         return user;
     }
 
-    /*
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-     */
-
-    public Category getCategorie() {
+    public Category getCategory() {
         return category;
     }
 

@@ -1,36 +1,34 @@
 package fr.tokazio.postit;
 
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.BeforeEach;
+import fr.tokazio.postit.api.Categories;
+import fr.tokazio.postit.api.Liking;
+import fr.tokazio.postit.api.PostitService;
+import fr.tokazio.postit.api.Saver;
+import fr.tokazio.postit.exceptions.CantLikeAPostitIOwnException;
+import fr.tokazio.postit.exceptions.NoUserException;
+import fr.tokazio.postit.exceptions.PostitNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.inject.Inject;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-@QuarkusTest
 public class PostitServiceTest {
 
-    private @Mock
-    Saver saver;
-    private @InjectMocks
-    @Inject
-    PostitService service;
-
-    @BeforeEach
-    public void setup() {
-        service.clear();
-    }
+    @Mock
+    private Saver saver;
+    @InjectMocks
+    private PostitService service = new PostitServiceImpl();
 
     @Test
     public void get() throws PostitNotFoundException {
@@ -39,7 +37,7 @@ public class PostitServiceTest {
         //when
         final Postit actual = service.get("abcd");
         //then
-        assertThat(actual.getText()).isEqualTo("one");
+        PostitAssert.assertThat(actual).hasText("one");
     }
 
     @Test
@@ -73,7 +71,7 @@ public class PostitServiceTest {
         //when
         final Postit actual = service.delete("abcd");
         //then
-        assertThat(actual.getText()).isEqualTo("one");
+        PostitAssert.assertThat(actual).hasText("one");
         assertThat(service.all()).hasSize(1);
     }
 
@@ -84,13 +82,13 @@ public class PostitServiceTest {
         //when
         final Postit actual = service.edit("abcd", PostItDummies.edition());
         //then
-        assertThat(actual.getText()).isEqualTo("two edited");
-        assertThat(actual.getCategorie()).isEqualTo(Categories.CONTINUER);
+        PostitAssert.assertThat(actual).hasText("two edited");
+        PostitAssert.assertThat(actual).hasCategorie(Categories.CONTINUER);
         assertThat(service.all()).hasSize(2);
     }
 
     @Test
-    public void like() throws PostitNotFoundException, CantLikeAPostitIOwnException {
+    public void like() throws PostitNotFoundException, CantLikeAPostitIOwnException, NoUserException {
         //given
         weHaveTwoPostit();
         //when
@@ -100,7 +98,22 @@ public class PostitServiceTest {
     }
 
     @Test()
-    public void cantLikeAPostitIOwn() throws PostitNotFoundException {
+    public void likeWithoutUser() throws PostitNotFoundException, CantLikeAPostitIOwnException {
+        //given
+        weHaveTwoPostit();
+        Throwable ex = null;
+        //when
+        try {
+            service.like("abcd", null);
+        } catch (NoUserException e) {
+            ex = e;
+        }
+        //then
+        assertThat(ex).isNotNull();
+    }
+
+    @Test()
+    public void cantLikeAPostitIOwn() throws PostitNotFoundException, NoUserException {
         //given
         weHaveTwoPostit();
         Throwable ex = null;
@@ -115,7 +128,7 @@ public class PostitServiceTest {
     }
 
     @Test
-    public void unlike() throws PostitNotFoundException, CantLikeAPostitIOwnException {
+    public void unlike() throws PostitNotFoundException, CantLikeAPostitIOwnException, NoUserException {
         //given
         weHaveTwoPostit();
         //when
@@ -142,7 +155,7 @@ public class PostitServiceTest {
         final boolean actual = service.save();
 
         //then
-        verify(saver, times(1)).save(anyString(), new ArrayList<>());
+        verify(saver, times(1)).save(anyString(), anyList());
         assertThat(actual).isTrue();
     }
 
@@ -163,9 +176,9 @@ public class PostitServiceTest {
     //==========================================
 
     private void weHaveTwoPostit() {
+        service.clear();
         service.add(PostItDummies.postitOne());
         service.add(PostItDummies.postitTwo());
-        System.out.println(service.all());
     }
 
 }

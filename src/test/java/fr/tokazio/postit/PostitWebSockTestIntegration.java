@@ -2,7 +2,6 @@ package fr.tokazio.postit;
 
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.websocket.*;
@@ -10,22 +9,30 @@ import java.net.URI;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @QuarkusTest
-public class PostitWebSockTest {
+public class PostitWebSockTestIntegration {
 
     private static final LinkedBlockingDeque<String> MESSAGES = new LinkedBlockingDeque<>();
 
-    @TestHTTPResource("/websock")
+    @TestHTTPResource("/websock/stu")
     URI uri;
 
     @Test
-    public void testWebsocketChat() throws Exception {
+    public void testWebsocket() throws Exception {
         try (Session session = ContainerProvider.getWebSocketContainer().connectToServer(Client.class, uri)) {
-            Assertions.assertEquals("CONNECT", MESSAGES.poll(10, TimeUnit.SECONDS));
-            Assertions.assertEquals("User stu joined", MESSAGES.poll(10, TimeUnit.SECONDS));
-            session.getAsyncRemote().sendText("hello world");
-            Assertions.assertEquals(">> stu: hello world", MESSAGES.poll(10, TimeUnit.SECONDS));
+            assertThat(msg()).isEqualTo("CONNECT");
+            assertThat(msg()).startsWith("joined::").contains("stu");
         }
+    }
+
+    //==========================================
+    //Utilities
+    //==========================================
+
+    private String msg() throws InterruptedException {
+        return MESSAGES.poll(10, TimeUnit.SECONDS);
     }
 
     @ClientEndpoint

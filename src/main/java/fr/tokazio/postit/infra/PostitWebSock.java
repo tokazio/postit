@@ -1,5 +1,6 @@
-package fr.tokazio.postit;
+package fr.tokazio.postit.infra;
 
+import fr.tokazio.postit.api.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,9 @@ public class PostitWebSock {
     public static final String CMD_SEPARATOR = "::";
     public static final String LEFT = "left";
     public static final String MESSAGE = "message";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PostitWebSock.class);
+
     @Inject
     private UserService userService;
 

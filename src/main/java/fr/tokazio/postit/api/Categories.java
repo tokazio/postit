@@ -1,7 +1,7 @@
-package fr.tokazio.postit;
+package fr.tokazio.postit.api;
 
-import java.util.Arrays;
-import java.util.List;
+import fr.tokazio.postit.Category;
+
 
 public interface Categories {
 
@@ -12,14 +12,4 @@ public interface Categories {
     Category PLUS = new Category("PLUS", "Faire plus");
     Category COMMENCER = new Category("COMMENCER", "Commencer à");
 
-    List<Category> ALL = Arrays.asList(ARRETER, CONTINUER, MOINS, PLUS, COMMENCER);
-
-    static Category from(final Category category) {
-        for (Category c : ALL) {
-            if (c.getValue().equals(category.getValue())) {
-                return c;
-            }
-        }
-        return NONE;
-    }
 }
