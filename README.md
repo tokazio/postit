@@ -2,23 +2,29 @@
 
 
 ## TODO
-* [ ] onglet 1 -> note du sprint 1 à 5
-* [ ] onglet 2 -> 5 catégories
-* [ ] onglet 3 -> actions
-* [ ] onglet 4 -> note de l'utilité de la rétro
-* [v] bouton save (en bas à droite comme +)
-* [v] bouton 'coeur' sur postit qui ne sont pas les miens + count
-* [v] passer automatiquement à la ligne + aligner à gauche
+* [x] onglet 1 -> note du sprint 1 à 5
+* [ ] enchanges rating sprint avec le serveur
+* [x] onglet 2 -> 5 catégories
+* [x] onglet 3 -> actions
+* [ ] enchanges actions avec le serveur
+* [x] onglet 4 -> note de l'utilité de la rétro
+* [ ] enchanges rating retro avec le serveur
+* [x] bouton save (en bas à droite comme +)
+* [x] bouton 'coeur' sur postit qui ne sont pas les miens + count
+* [x] passer automatiquement à la ligne + aligner à gauche
 * [ ] surbrillance selection de l'admin
 * [ ] editable/supp par l'admin
-* [v] user même largeur
-* [v] couleurs plus fluo :D + ordonnée
-* [v] couleur fond liste user
-* [v] se reconnecter au click sur synchro
-* [v] utiliser List plutôt que Set (qui fait de l'ordre alpha)
-* [v] police du pre
-* [ ] card add/remove animation -> TODO https://stackoverflow.com/questions/48652941/vue-click-animation-without-settimeout
-* [ ] précisions dans les notifs (valide ou erreur) [wip]
+* [ ] save que pour l'admin
+* [x] user même largeur
+* [x] couleurs plus fluo :D + ordonnée
+* [x] couleur fond liste user
+* [x] se reconnecter au click sur synchro
+* [x] utiliser List plutôt que Set (qui fait de l'ordre alpha)
+* [x] police du pre
+* [x] card add/remove animation 
+* [ ] card edit animation -> https://stackoverflow.com/questions/48652941/vue-click-animation-without-settimeout
+* [x] précisions dans les notifs (valide ou erreur) 
+* [x] color user 'me'
 
 #Quarkus
 

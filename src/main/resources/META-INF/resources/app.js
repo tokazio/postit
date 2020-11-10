@@ -14,6 +14,15 @@ new Vue({
     el: '#q-app',
     data: function () {
         return {
+            ratingSprint: null,
+            ratingRetro: null,
+            ratingIcons: [
+                'sentiment_very_dissatisfied',
+                'sentiment_dissatisfied',
+                'sentiment_satisfied',
+                'sentiment_very_satisfied'
+              ],
+            tab: 'sprintNotes',
             mode: null,
             connection: null,
             connected: false,
@@ -25,6 +34,7 @@ new Vue({
             textEdit: '',
             user: '',
             postits: null,
+            actions: null,
             users: null,
             categories: null,
             selectedCat: null,
@@ -45,13 +55,16 @@ new Vue({
                 headers: {
                     'Content-Type': V1,
                 }
-            }).then(function () {
+            }).then(function (response) {
+                    console.log("Supprimé:")
+                    console.log(response)
                   me.notif('Supprimé','positive')
+                  me.notifAll(me.user+" à supprimé un postit dans '"+response.data.category.label+"'")
                   me.deletingId = -1
                   me.refresh()
                   me.connection.send('refresh');
             }, function(err){
-                me.notif( err,'negative')
+                me.notif( err.message,'negative')
             })
         },
 
@@ -87,7 +100,7 @@ new Vue({
                 me.notifAll(text,'positive')
                 me.refresh();
             }, function(err){
-                me.notif(err,'negative')
+                me.notif(err.message,'negative')
             });
         },
 
@@ -147,12 +160,13 @@ new Vue({
             }).then(function () {
                 me.addDialog = false
                 me.notif('Modifié','positive')
+                me.notifAll(me.user+" à modifié un postit dans '"+me.selectedCat.label+"'")
                 me.textEdit = '';
                 me.editingId = -1
                 me.refresh();
                 me.connection.send('refresh');
             }, function(err){
-                me.notif(err,'negative')
+                me.notif(err.message,'negative')
             });
         },
 
@@ -168,7 +182,7 @@ new Vue({
                 me.notif('Sauvegardé','positive')
                 me.refresh();
             }, function(err){
-                me.notif(err,'negative')
+                me.notif(err.message,'negative')
             });
         },
 
@@ -190,13 +204,14 @@ new Vue({
                 data: newPostit
             }).then(function () {
                me.addDialog = false
-               me.notif('Ajouté','positive')
+               me.notif("Ajouté",'positive')
+               me.notifAll(me.user+" à ajouté un postit dans '"+me.selectedCat.label+"'")
                me.textEdit = '';
                me.selectedCat = null
                me.refresh();
                me.connection.send('refresh');
             },function(err){
-                 me.notif(err,'negative')
+                 me.notif(err.message,'negative')
             });
         },
 
@@ -223,21 +238,29 @@ new Vue({
 
         connect: function() {
             if(this.user==null || this.user==''){
+                //can't connect without user
                 return
             }
             this.userDialog = false
-            console.log("Starting connection to WebSocket Server")
+            console.log("Starting connection to WebSocket Server as "+this.user+"...")
             this.connection = new WebSocket("ws://"+location.host+"/websock/"+this.user)
 
             me = this
             this.connection.onmessage = function(event) {
               console.log(event);
+              if(event==null || event.data ==null){
+                return
+              }
               if(event.data.includes('joined')){
-                 me.notif(event.data,'info')
-                 me.refreshUsers();
+                if(!event.data.includes(me.user)){
+                 me.notif(event.data.substring(8),'info')
+                }
+                me.refreshUsers();
               }
               if(event.data.includes('left')){
-                 me.notif(event.data,'info')
+                if(!event.data.includes(me.user)){
+                 me.notif(event.data.substring(6),'info')
+                }
                  me.refreshUsers();
               }
               from = event.data.substring(9).split(': ')[0];
@@ -246,6 +269,9 @@ new Vue({
               }
               message = event.data.substring(9).split(': ')[1];
               console.log(message);
+              if(message==null){
+                return
+              }
               if(message.includes('notif')){
                   me.notif(message.substring(7),'purple')
                   me.refresh();
@@ -257,7 +283,7 @@ new Vue({
 
             this.connection.onopen = function(event) {
               console.log(event)
-              console.log("Successfully connected to the websocket server...")
+              console.log("Successfully connected to the websocket server as "+this.user)
               me.connected = true
               me.refreshUsers();
             }
@@ -266,14 +292,14 @@ new Vue({
               console.log(event)
               console.log("Websocket closed")
               me.connected = false
-              me.notif('Déconnecté','info')
+              me.notif('Déconnecté','warning')
             }
 
             this.connection.onerror = function(event) {
-              console.log(event)
               console.log("Websocket error")
+              console.log(event)
               me.connected = false
-              me.notif('Déconnecté','info')
+              me.notif('Erreur de connexion','negative')
             }
 
 
@@ -307,10 +333,10 @@ new Vue({
 
             },
 
-            notif: function(text,aColor){
+            notif: function(aMessage,aColor){
                   this.$q.notify({
                     position: 'bottom-left',
-                    message: text,
+                    message: aMessage,
                     color: aColor
                   })
             },
@@ -319,6 +345,12 @@ new Vue({
                 me.connection.send('notif::'+text);
             },
 
+            ratingOtherRetro :function(aUser) {
+                return null
+            }, //TODO rating from resource
+            ratingOtherSprint : function(aUser) {
+                return null
+            } //TODO rating from resource
 
 
     },
@@ -335,6 +367,7 @@ new Vue({
             me.categories = response.data
             console.log(me.categories)
         });
+
 
 
     }

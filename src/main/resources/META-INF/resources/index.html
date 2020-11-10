@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <title>Postit</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons|Material+Icons+Outlined|Material+Icons+Round|Material+Icons+Sharp"
           rel="stylesheet" type="text/css">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@^5.0.0/css/materialdesignicons.min.css" rel="stylesheet"
@@ -19,66 +21,277 @@
 
 <body>
 <div id="q-app">
+
+
     <q-layout view="hHh lpR fFf">
         <q-drawer bordered content-style="background-color:#666" show-if-above side="left" width="160">
             <div class="column" style="width:100%;text-align:center">
                 <div class="q-ma-sm col">
-                    <q-badge :color="syncColor()" @click="connect()">
+                    <q-badge :color="syncColor()">
                         synchronisation
                     </q-badge>
                 </div>
                 <div class="col">
-                    <q-chip class="col" style="width:90%" v-for="user in users">
+                    <q-chip :color="aUser==user ? 'primary' : ''" class="col" style="width:90%" v-for="aUser in users">
                         <q-avatar>
                             <img src="https://cdn.quasar.dev/img/boy-avatar.png">
                         </q-avatar>
-                        {{user}}
+                        {{aUser}}
                     </q-chip>
                 </div>
             </div>
         </q-drawer>
         <q-page-container>
             <q-page>
-                <div class="row">
-                    <div class="col" style="text-align:center" v-for="category in categories">
-                        <q-chip class="q-mt-md">{{category.label}}</q-chip>
 
-                        <transition
-                                appear
-                                enter-active-class="animated jackInTheBox"
-                                leave-active-class="animated hinge"
-                        >
-                            <q-card :class="postitColor(postit)" class="q-ma-md my-card shadow-1 q-pa-xs" square
-                                    style="min-width:150px" v-for="postit in postits"
-                                    v-if="postit.category.value==category.value">
-                                <q-card-section class="q-ma-none q-pa-xs text-caption">
-                                <pre style="margin:0;padding:0;white-space: pre-wrap;word-break: keep-all;text-align:left"
-                                     v-html="postit.text"></pre>
-                                </q-card-section>
-                                <q-card-actions align="right">
-                                    <q-btn @click="confirmDelete(postit.id)" color="gray" flat icon="delete" round
-                                           size="sm"
-                                           v-show="postit.user==user"></q-btn>
-                                    <q-btn @click="showEdit(postit.id)" color="gray" flat icon="edit" round size="sm"
-                                           v-show="postit.user==user"></q-btn>
-                                    <q-btn :icon="liked(postit)" @click="like(postit.id)" color="gray" flat round
-                                           size="sm"
-                                           :disable="postit.user==user">
-                                        <q-badge floating
-                                                 v-if="postit!=null && postit.likedBy!=null && postit.likedBy.length>0">
-                                            {{postit.likedBy.length}}
-                                        </q-badge>
-                                    </q-btn>
-                                </q-card-actions>
-                            </q-card>
-                        </transition>
+                <q-banner class="bg-orange text-white" inline-actions rounded v-show="!connected">
+                    Vous êtes déconnecté
+                    <template v-slot:action>
+                        <q-btn @click="connect()" flat label="Se connecter"/>
+                    </template>
+                </q-banner>
 
-                    </div>
-                </div>
+                <q-tabs
+                        active-color="white"
+                        align="left"
+                        align="justify"
+                        class="bg-primary text-grey-5"
+                        indicator-color="orange-12"
+                        no-caps
+                        v-model="tab"
+                >
+                    <q-tab icon="mail" label="Note du sprint" name="sprintNotes"></q-tab>
+                    <q-tab icon="alarm" label="Remarques" name="sprintPostits"></q-tab>
+                    <q-tab icon="movie" label="Actions" name="sprintActions"></q-tab>
+                    <q-tab icon="movie" label="Note de la rétro" name="retroNotes"></q-tab>
+                </q-tabs>
+
+                <q-tab-panels animated v-model="tab">
+
+                    <q-tab-panel name="sprintNotes">
+                        <div>Mon ressenti sur ce sprint:
+                            <q-rating :icon="ratingIcons"
+                                      class="q-ml-md"
+                                      color="green-5"
+                                      dense
+                                      max="4"
+                                      size="md"
+                                      v-model="ratingSprint"
+                            >
+                                <template v-slot:tip-1>
+                                    <q-tooltip>Nul</q-tooltip>
+                                </template>
+                                <template v-slot:tip-2>
+                                    <q-tooltip>Mof'</q-tooltip>
+                                </template>
+                                <template v-slot:tip-3>
+                                    <q-tooltip>Normal</q-tooltip>
+                                </template>
+                                <template v-slot:tip-4>
+                                    <q-tooltip>Top</q-tooltip>
+                                </template>
+
+                            </q-rating>
+                        </div>
+
+                        <q-card class="q-ma-md" v-for="aUser in users" v-if="aUser!=user">
+                            <q-card-section>
+                                {{aUser}}
+                                <q-rating :icon="ratingIcons"
+                                          :key="'rating-'+aUser"
+                                          class="q-ml-md"
+                                          color="green-5"
+                                          dense
+                                          max="4"
+                                          readonly
+                                          size="md"
+                                          size="3.5em"
+                                          v-model="ratingOtherSprint(aUser)"
+                                >
+                                    <template v-slot:tip-1>
+                                        <q-tooltip>Nul</q-tooltip>
+                                    </template>
+                                    <template v-slot:tip-2>
+                                        <q-tooltip>Mof'</q-tooltip>
+                                    </template>
+                                    <template v-slot:tip-3>
+                                        <q-tooltip>Normal</q-tooltip>
+                                    </template>
+                                    <template v-slot:tip-4>
+                                        <q-tooltip>Top</q-tooltip>
+                                    </template>
+
+                                </q-rating>
+                            </q-card-section>
+                        </q-card>
+
+
+                    </q-tab-panel>
+
+                    <q-tab-panel name="sprintPostits">
+                        <div class="row">
+                            <div class="col" style="text-align:center" v-for="category in categories">
+                                <q-chip class="q-mt-md">{{category.label}}</q-chip>
+
+                                <transition-group
+                                        appear
+                                        enter-active-class="animated jackInTheBox"
+                                        leave-active-class="animated hinge"
+                                >
+                                    <q-card :class="postitColor(postit)" class="q-ma-md my-card shadow-1 q-pa-xs"
+                                            key="postit.id"
+                                            square style="min-width:150px"
+                                            v-for="postit in postits"
+                                            v-if="postit.category.value==category.value"
+                                    >
+                                        <q-card-section class="q-ma-none q-pa-xs text-caption">
+                                            <pre style="margin:0;padding:0;white-space: pre-wrap;word-break: keep-all;text-align:left"
+                                                 v-html="postit.text">
+                                            </pre>
+                                        </q-card-section>
+                                        <q-card-actions align="right">
+                                            <q-btn @click="confirmDelete(postit.id)" color="gray" flat icon="delete"
+                                                   round
+                                                   size="sm"
+                                                   v-show="postit.user==user"></q-btn>
+                                            <q-btn @click="showEdit(postit.id)" color="gray" flat icon="edit" round
+                                                   size="sm"
+                                                   v-show="postit.user==user"></q-btn>
+                                            <q-btn :disable="postit.user==user" :icon="liked(postit)"
+                                                   @click="like(postit.id)" color="gray" flat
+                                                   round
+                                                   size="sm">
+                                                <q-badge floating
+                                                         v-if="postit!=null && postit.likedBy!=null && postit.likedBy.length>0">
+                                                    {{postit.likedBy.length}}
+                                                </q-badge>
+                                            </q-btn>
+                                        </q-card-actions>
+                                    </q-card>
+                                </transition-group>
+
+                            </div>
+                        </div>
+                        <q-page-sticky :offset="[18, 18]" position="bottom-right">
+                            <q-btn @click="showEdit(null)" color="primary" fab icon="add"></q-btn>
+                            <q-btn fab></q-btn>
+                        </q-page-sticky>
+                    </q-tab-panel>
+
+
+                    <q-tab-panel name="sprintActions">
+                        <div class="row">
+                            <div class="col" style="text-align:center">
+                                <transition-group
+                                        appear
+                                        enter-active-class="animated jackInTheBox"
+                                        leave-active-class="animated hinge"
+                                >
+                                    <q-card :class="actionColor(action)" class="q-ma-md my-card shadow-1 q-pa-xs"
+                                            key="action.id"
+                                            square style="min-width:150px"
+                                            v-for="action in actions"
+                                    >
+                                        <q-card-section class="q-ma-none q-pa-xs text-caption">
+                                            <pre style="margin:0;padding:0;white-space: pre-wrap;word-break: keep-all;text-align:left"
+                                                 v-html="action.text">
+                                            </pre>
+                                        </q-card-section>
+                                        <q-card-actions align="right">
+                                            <q-btn @click="confirmActionDelete(action.id)" color="gray" flat
+                                                   icon="delete" round
+                                                   size="sm"
+                                                   v-show="action.user==user"></q-btn>
+                                            <q-btn @click="showEditAction(action.id)" color="gray" flat icon="edit"
+                                                   round size="sm"
+                                                   v-show="action.user==user"></q-btn>
+                                            <q-btn :disable="action.user==user" :icon="likedAction(action)"
+                                                   @click="likeAction(action.id)" color="gray" flat
+                                                   round
+                                                   size="sm">
+                                                <q-badge floating
+                                                         v-if="action!=null && action.likedBy!=null && action.likedBy.length>0">
+                                                    {{action.likedBy.length}}
+                                                </q-badge>
+                                            </q-btn>
+                                        </q-card-actions>
+                                    </q-card>
+                                </transition-group>
+
+                            </div>
+                        </div>
+                        <q-page-sticky :offset="[18, 18]" position="bottom-right">
+                            <q-btn @click="showEditAction(null)" color="primary" fab icon="add"></q-btn>
+                            <q-btn fab></q-btn>
+                        </q-page-sticky>
+                    </q-tab-panel>
+
+                    <q-tab-panel name="retroNotes">
+
+                        <div>Mon ressenti sur cette rétrospactive:
+                            <q-rating :icon="ratingIcons"
+                                      class="q-ml-md"
+                                      color="green-5"
+                                      dense
+                                      max="4"
+                                      size="md"
+                                      v-model="ratingRetro"
+                            >
+                                <template v-slot:tip-1>
+                                    <q-tooltip>Nul</q-tooltip>
+                                </template>
+                                <template v-slot:tip-2>
+                                    <q-tooltip>Mof'</q-tooltip>
+                                </template>
+                                <template v-slot:tip-3>
+                                    <q-tooltip>Normal</q-tooltip>
+                                </template>
+                                <template v-slot:tip-4>
+                                    <q-tooltip>Top</q-tooltip>
+                                </template>
+
+                            </q-rating>
+                        </div>
+
+
+                        <q-card class="q-ma-md" v-for="aUser in users" v-if="aUser!=user">
+                            <q-card-section>
+                                {{aUser}}
+                                <q-rating :icon="ratingIcons"
+                                          :key="'rating-'+aUser"
+                                          class="q-ml-md"
+                                          color="green-5"
+                                          dense
+                                          max="4"
+                                          readonly
+                                          size="md"
+                                          v-model="ratingOtherRetro(aUser)"
+                                >
+                                    <template v-slot:tip-1>
+                                        <q-tooltip>Nul</q-tooltip>
+                                    </template>
+                                    <template v-slot:tip-2>
+                                        <q-tooltip>Mof'</q-tooltip>
+                                    </template>
+                                    <template v-slot:tip-3>
+                                        <q-tooltip>Normal</q-tooltip>
+                                    </template>
+                                    <template v-slot:tip-4>
+                                        <q-tooltip>Top</q-tooltip>
+                                    </template>
+
+                                </q-rating>
+                            </q-card-section>
+                        </q-card>
+                    </q-tab-panel>
+
+
+                </q-tab-panels>
+
                 <q-page-sticky :offset="[18, 18]" position="bottom-right">
-                    <q-btn @click="showEdit(null)" color="primary" fab icon="add"></q-btn>
                     <q-btn @click="save()" color="secondary" fab icon="save"></q-btn>
                 </q-page-sticky>
+
             </q-page>
         </q-page-container>
     </q-layout>
@@ -155,6 +368,6 @@
 <script src="https://cdn.jsdelivr.net/npm/quasar@1.14.1/dist/quasar.umd.modern.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quasar@1.14.1/dist/lang/fr.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="app.js?version=22"></script>
+<script charset="UTF-8" src="app.js?version=26"></script>
 </body>
 </html>
