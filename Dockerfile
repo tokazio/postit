@@ -101,8 +101,6 @@ USER 1001
 ENV JAVA_OPTS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 
-WORKDIR /home
-
 RUN pwd
 
-ENTRYPOINT [ "java","-jar", JAVA_APP_JAR ]
+ENTRYPOINT [ "java -jar $JAVA_APP_JAR" ]
