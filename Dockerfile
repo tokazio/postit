@@ -90,6 +90,7 @@ RUN ls -la build/quarkus-app/lib
 RUN mkdir /deployments
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
+RUN pwd
 COPY --chown=185 build/quarkus-app/lib/ /deployments/lib/
 COPY --chown=185 build/quarkus-app/*.jar /deployments/
 COPY --chown=185 build/quarkus-app/app/ /deployments/app/
@@ -99,5 +100,9 @@ EXPOSE 8080
 USER 185
 ENV JAVA_OPTS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
+
+WORKDIR /home
+
+RUN pwd
 
 ENTRYPOINT java -jar JAVA_APP_JAR
