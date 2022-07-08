@@ -47,10 +47,8 @@ test {
 }
 
 //for heroku deploy
-stage {
-    task stage(dependsOn: ['build', 'clean'])
-    build.mustRunAfter clean
-}
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
 
 //no test in stage step
 gradle.taskGraph.whenReady {
