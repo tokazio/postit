@@ -83,9 +83,9 @@ RUN gradle stage --no-daemon
 
 RUN pwd
 
-RUN ls -lad build
-RUN ls -lad build/quarkus-app
-RUN ls -lad build/quarkus-app/lib
+RUN ls -la build
+RUN ls -la build/quarkus-app
+RUN ls -la build/quarkus-app/lib
 
 RUN mkdir /deployments
 
