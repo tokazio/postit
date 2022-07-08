@@ -227,7 +227,7 @@ new Vue({
             }
             this.userDialog = false
             console.log("Starting connection to WebSocket Server")
-            this.connection = new WebSocket("ws://"+location.host+"/websock/"+this.user)
+            this.connection = new WebSocket("wss://" + location.host + "/websock/" + this.user)
 
             me = this
             this.connection.onmessage = function(event) {
