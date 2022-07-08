@@ -12,7 +12,7 @@ dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-resteasy'
     implementation 'io.quarkus:quarkus-resteasy-jackson'
-    implementation 'io.quarkus:quarkus-undertow-websockets'
+    implementation 'io.quarkus:quarkus-websockets'
     implementation 'io.quarkus:quarkus-smallrye-metrics'
     implementation 'io.quarkus:quarkus-smallrye-health'
 
@@ -38,8 +38,8 @@ compileTestJava {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 test {

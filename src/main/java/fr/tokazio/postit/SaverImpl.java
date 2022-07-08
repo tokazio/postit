@@ -19,7 +19,7 @@ public class SaverImpl implements Saver {
     private static final Logger LOGGER = LoggerFactory.getLogger(SaverImpl.class);
 
     @Inject
-    private ObjectMapper mapper;
+    ObjectMapper mapper;
 
     @Override
     public void save(final String filename, final List<Postit> items) throws IOException {

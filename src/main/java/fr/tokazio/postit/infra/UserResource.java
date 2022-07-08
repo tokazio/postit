@@ -23,7 +23,7 @@ import static fr.tokazio.postit.api.Version.V1;
 public class UserResource {
 
     @Inject
-    private UserService service;
+    UserService service;
 
     @GET
     @Path("/")

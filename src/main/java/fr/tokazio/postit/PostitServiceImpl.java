@@ -25,7 +25,7 @@ public class PostitServiceImpl implements PostitService {
     private List<Postit> items = new CopyOnWriteArrayList<>();
 
     @Inject
-    private Saver saver;
+    Saver saver;
 
     public PostitServiceImpl() {
         load();

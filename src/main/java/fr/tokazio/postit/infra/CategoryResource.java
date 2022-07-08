@@ -24,7 +24,7 @@ import static fr.tokazio.postit.api.Version.V1;
 public class CategoryResource {
 
     @Inject
-    private CategoryService service;
+    CategoryService service;
 
     @GET
     @Path("/")
