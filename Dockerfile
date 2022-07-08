@@ -76,14 +76,10 @@
 #
 ###
 FROM gradle:7.4.2-jdk17-alpine AS build
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en'
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle stage --no-daemon
-
-FROM registry.access.redhat.com/ubi8/openjdk-17:1.11
-
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en'
-
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
 COPY --chown=185 build/quarkus-app/lib/ /deployments/lib/
