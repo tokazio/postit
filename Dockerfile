@@ -75,6 +75,11 @@
 #   accessed directly. (example: "foo.example.com,bar.example.com")
 #
 ###
+FROM gradle:4.7.0-jdk8-alpine AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle stage --no-daemon
+
 FROM registry.access.redhat.com/ubi8/openjdk-17:1.11
 
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en'

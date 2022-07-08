@@ -57,3 +57,8 @@ gradle.taskGraph.whenReady {
             test.enabled = false
         }
 }
+
+//for publishing
+tasks.withType(GenerateModuleMetadata).configureEach {
+    suppressedValidationErrors.add('enforced-platform')
+}
